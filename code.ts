@@ -1,6 +1,6 @@
 // 1. Buscar todos los styles del documento
 // 2. Sacar el nombre y el color
-// 3. Crear una grid en el documento con todos los colores
+// 3. Crear una grid en el documento con todos los colores y su nombre
 
 const styles = figma.getLocalPaintStyles();
 const styleNames = styles.map((style) => style.name);
