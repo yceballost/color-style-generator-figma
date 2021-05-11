@@ -17,33 +17,45 @@ const numberOfStyles = styles.length;
 const nodes: SceneNode[] = [];
 for (let i = 0; i < numberOfStyles; i++) {
   const rect = figma.createRectangle();
+
+  const width = rect.width;
+  const height = rect.height;
+  
   rect.name = styleNames[i];
-  rect.y = i * 150;
   rect.fills = styleColor[i];
-  rect.cornerRadius = 50;
   rect.fillStyleId = styleId[i];
+  
+  rect.y = i * 150;
+  
+  rect.cornerRadius = 50;
+
   figma.currentPage.appendChild(rect);
   nodes.push(rect);
 }
 
-for (let i = 0; i < numberOfStyles; i++) {
-  figma.loadFontAsync({ family: "Roboto", style: "Regular" })
+async function createTextLabel() {
+  for (let i = 0; i < numberOfStyles; i++) {
+    const colorName = figma.createText();
+    
+    await figma.loadFontAsync({ family: "Roboto", style: "Regular" })
 
-  const colorName = figma.createText();
-  
-  // colorName.characters = styleNames[i];
-  colorName.name = styleNames[i];
-  colorName.y = i * 150 + 43;
-  colorName.x = 150;
-  colorName.fills = [{type: 'SOLID', color: {r: 0, g: 0, b: 0}}];
-  figma.currentPage.appendChild(colorName);
-  nodes.push(colorName);
-}
+    colorName.characters = styleNames[i];
+    colorName.name = styleNames[i];
+
+    colorName.y = i * 150 + 43;
+    colorName.x = 150;
+    colorName.fills = [{type: 'SOLID', color: {r: 0, g: 0, b: 0}}];
+    colorName.fontSize = 18;
+    
+    figma.currentPage.appendChild(colorName);
+    nodes.push(colorName);
+  }
+};
 
 figma.currentPage.selection = nodes;
 figma.viewport.scrollAndZoomIntoView(nodes);
 
 // Make sure to close the plugin when you're done. Otherwise the plugin will
 // keep running, which shows the cancel button at the bottom of the screen.
-figma.closePlugin("Done!");
+createTextLabel().then(n => figma.closePlugin('Done!'))
 
